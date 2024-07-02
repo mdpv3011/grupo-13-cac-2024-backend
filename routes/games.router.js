@@ -41,3 +41,5 @@ router.get('/:id', controller.show)
 router.post('/', upload.single('imagen'), controller.store)
 router.put('/:id', upload.single('imagen'), controller.update)
 router.delete('/:id', controller.destroy)
+
+module.exports = router
