@@ -35,13 +35,14 @@ const show = (req, res) => {
 
 const store = (req, res) => {
   const { filename } = req.file
-  const { nombre, genero, categoria, autor } = req.body
+  const { nombre, genero, autor, id_categoria } = req.body
 
-  const sql = 'INSET INTO games (nombre, genero, categoria, autor, imagen) VALUES ( ?, ?, ?, ?)'
+  const sql = 'INSERT INTO games (nombre, genero, autor, id_categoria, imagen) VALUES ( ?, ?, ?, ?, ?)'
 
-  db.query(sql, [nombre, genero, categoria, autor, filename], (error, result) => {
+  db.query(sql, [nombre, genero, autor, id_categoria, filename], (error, result) => {
     if (error) {
       fs.unlinkSync(path.resolve(__dirname, '../uploads', filename))
+      console.error(error)
       return res.status(500).json({ error: 'Ha habido un error' })
     }
 
@@ -52,12 +53,12 @@ const store = (req, res) => {
 }
 
 const update = (req, res) => {
-  let sql = 'UPDATE games SET nombre = ?, genero = ?, categoria = ?, autor = ? WHERE id = ?'
+  let sql = 'UPDATE games SET nombre = ?, genero = ?, id_categoria = ?, autor = ? WHERE id = ?'
 
   const { id } = req.params
-  const { nombre, genero, categoria, autor } = req.body
+  const { nombre, genero, id_categoria, autor } = req.body
 
-  const values = [nombre, genero, categoria, autor]
+  const values = [nombre, genero, id_categoria, autor]
 
   if (req.file) {
     const { filename } = req.file
@@ -100,7 +101,7 @@ const destroy = (req, res) => {
       return res.status(404).json({ message: 'No existe el juego' })
     }
 
-    res.json({ message: 'Juego borrrado con existo!' })
+    res.json({ message: 'Juego borrrado con exito!' })
   })
 }
 
