@@ -56,7 +56,6 @@ const update = (req, res) => {
   const { id } = req.params
   const { nombre, id_categoria, autor } = req.body
 
-  // Primero, obtener la imagen actual si existe
   db.query('SELECT imagen FROM games WHERE id = ?', [id], (error, results) => {
     if (error) {
       console.error(error)
