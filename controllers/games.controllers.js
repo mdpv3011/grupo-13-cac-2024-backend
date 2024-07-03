@@ -35,11 +35,11 @@ const show = (req, res) => {
 
 const store = (req, res) => {
   const { filename } = req.file
-  const { nombre, genero, autor, id_categoria } = req.body
+  const { nombre, autor, id_categoria } = req.body
 
-  const sql = 'INSERT INTO games (nombre, genero, autor, id_categoria, imagen) VALUES ( ?, ?, ?, ?, ?)'
+  const sql = 'INSERT INTO games (nombre, autor, id_categoria, imagen) VALUES ( ?, ?, ?, ?)'
 
-  db.query(sql, [nombre, genero, autor, id_categoria, filename], (error, result) => {
+  db.query(sql, [nombre, autor, id_categoria, filename], (error, result) => {
     if (error) {
       fs.unlinkSync(path.resolve(__dirname, '../uploads', filename))
       console.error(error)
@@ -54,7 +54,7 @@ const store = (req, res) => {
 
 const update = (req, res) => {
   const { id } = req.params
-  const { nombre, genero, id_categoria, autor } = req.body
+  const { nombre, id_categoria, autor } = req.body
 
   // Primero, obtener la imagen actual si existe
   db.query('SELECT imagen FROM games WHERE id = ?', [id], (error, results) => {
@@ -69,12 +69,12 @@ const update = (req, res) => {
 
     const currentImage = results[0].imagen
 
-    let sql = 'UPDATE games SET nombre = ?, genero = ?, id_categoria = ?, autor = ? WHERE id = ?'
-    const values = [nombre, genero, id_categoria, autor, id]
+    let sql = 'UPDATE games SET nombre = ?, id_categoria = ?, autor = ? WHERE id = ?'
+    const values = [nombre, id_categoria, autor, id]
 
     if (req.file) {
       const { filename } = req.file
-      sql = 'UPDATE games SET nombre = ?, genero = ?, id_categoria = ?, autor = ?, imagen = ? WHERE id = ?'
+      sql = 'UPDATE games SET nombre = ?, id_categoria = ?, autor = ?, imagen = ? WHERE id = ?'
       values.splice(values.length - 1, 0, filename)
     }
 
@@ -109,7 +109,7 @@ const update = (req, res) => {
         }
       }
 
-      const game = { id, nombre, genero, id_categoria, autor }
+      const game = { id, nombre, id_categoria, autor }
       if (req.file) {
         game.imagen = req.file.filename
       }
