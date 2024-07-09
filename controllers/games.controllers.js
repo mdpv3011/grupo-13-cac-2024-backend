@@ -16,7 +16,7 @@ const index = (req, res) => {
   })
 }
 
-const show = (req, res) => {
+const show = (req, res) => {  
   const { id } = req.params
 
   const sql = 'SELECT * FROM games WHERE id = ?'
